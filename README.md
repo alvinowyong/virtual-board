@@ -1,5 +1,7 @@
 # Virtualboard - A real-time digital whiteboard
 
+![](https://s10.gifyu.com/images/demo-vb.md.gif)
+
 Bare minimal implementation of communication between browser clients using socket.io.
 
 ## How to run the code
