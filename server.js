@@ -22,16 +22,16 @@ const errorHandler = error => {
 	const address = server.address()
 	const bind = typeof address === 'string' ? 'pipe ' + address : 'port: ' + port
 	switch (error.code) {
-	case 'EACCES':
-		console.error(bind + ' requires elevated privileges.')
-		process.exit(1)
-		break
-	case 'EADDRINUSE':
-		console.error(bind + ' is already in use.')
-		process.exit(1)
-		break
-	default:
-		throw error
+		case 'EACCES':
+			console.error(bind + ' requires elevated privileges.')
+			process.exit(1)
+			break
+		case 'EADDRINUSE':
+			console.error(bind + ' is already in use.')
+			process.exit(1)
+			break
+		default:
+			throw error
 	}
 }
 
@@ -45,13 +45,14 @@ server.on('listening', () => {
 })
 
 
-// Web sockets
+/* Web sockets */
 const io = require('socket.io')(server)
 
 io.sockets.on('connection', (socket) => {
 	console.log('Client connected: ' + socket.id)
 
-	socket.on('mouse', (data) => socket.broadcast.emit('mouse', data))
+	/* Broadcast 'draw' message to all users on receive */
+	socket.on('draw', (data) => socket.broadcast.emit('draw', data))
 
 	socket.on('disconnect', () => console.log('Client has disconnected'))
 })

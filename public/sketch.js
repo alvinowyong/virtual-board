@@ -1,57 +1,98 @@
 let socket
-let color = '#000'
-let strokeWidth = 4
+let color = '#333'
+let strokeWidth = 5
 let cv
 
+function reset() {
+	/* Create 2D canvas */
+	cv = createCanvas(window.innerWidth / 1.1, window.innerHeight / 1.1, P2D)
+	canvasPosition()
+	cv.background(255, 255, 255)
+}
+
 function setup() {
-	// Creating canvas
-	cv = createCanvas(windowWidth / 2, windowHeight / 2)
-	centerCanvas()
+	/* Create 2D canvas */
+	cv = createCanvas(window.innerWidth / 1.1, window.innerHeight / 1.1, P2D)
+	canvasPosition()
 	cv.background(255, 255, 255)
 
-	// Start the socket connection
+	/* Start socket connection on Port 3000 */
 	socket = io.connect('http://localhost:3000')
 
-	// Callback function
-	socket.on('mouse', data => {
+	/* Callback function - on emit/broadcast receive */
+	socket.on('draw', data => {
 		stroke(data.color)
 		strokeWeight(data.strokeWidth)
 		line(data.x, data.y, data.px, data.py)
 	})
 
-	// Getting our buttons and the holder through the p5.js dom
-	const color_picker = select('#pickcolor')
-	const color_btn = select('#color-btn')
-	const color_holder = select('#color-holder')
+	/* Add strokeWidth changer */
+	const input = document.querySelector('body');
+	input.onkeydown = (e) => {
+		switch (e.keyCode) {
+			case 49:
+				color = '#333'
+				break;
+		
+			case 69:
+				color = '#FFFFFF'
+				break;
+			break;
+	
+			case 50:
+				color = '#ff0000'
+				break;
+		
+			case 51:
+				color = '#ffa500'
+				break;
+		
+			case 52:
+				color = '#ffff00'
+				break;
+	
+			case 53:
+				color = '#008000'
+				break;
+		
+			case 54:
+				color = '#0000ff'
+				break;
+	
+			case 55:
+				color = '#4b0082'
+				break;
 
-	const stroke_width_picker = select('#stroke-width-picker')
-	const stroke_btn = select('#stroke-btn')
+			case 56:
+				color = '#ee82ee'
+				break;
+			
+			case 219:
+				strokeWidth--;
+				break;
+		
+			case 221:
+				strokeWidth++;
+				break;
 
-	// Adding a mousePressed listener to the button
-	color_btn.mousePressed(() => {
-		// Checking if the input is a valid hex color
-		if (/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(color_picker.value())) {
-			color = color_picker.value()
-			color_holder.style('background-color', color)
-		} else {
-			console.log('Enter a valid hex value')
+			case 27:
+				reset();
+				break;
+			
+			default:
+				break;
 		}
-	})
-
-	// Adding a mousePressed listener to the button
-	stroke_btn.mousePressed(() => {
-		const width = parseInt(stroke_width_picker.value())
-		if (width > 0) strokeWidth = width
-	})
+	}
 }
 
+/* Allow sketch to re-render on window resizing */
 function windowResized() {
-	centerCanvas()
-	cv.resizeCanvas(windowWidth / 2, windowHeight / 2, false)
+	canvasPosition()
+	cv.resizeCanvas(windowWidth / 1.3, windowHeight / 1.3, false)
 }
 
 
-function centerCanvas() {
+function canvasPosition() {
 	const x = (windowWidth - width) / 2
 	const y = (windowHeight - height) / 2
 	cv.position(x, y)
@@ -59,17 +100,20 @@ function centerCanvas() {
 
 
 function mouseDragged() {
-	// Draw
+	/* Set stroke settings */
 	stroke(color)
 	strokeWeight(strokeWidth)
+
+	/* Draw for co-ordinates */
 	line(mouseX, mouseY, pmouseX, pmouseY)
 
-	// Send the mouse coordinates
-	sendmouse(mouseX, mouseY, pmouseX, pmouseY)
+	/* Send mouse coordinates */
+	broadcastDrawing(mouseX, mouseY, pmouseX, pmouseY)
 }
 
-// Sending data to the socket
-function sendmouse(x, y, pX, pY) {
+/* Sending data to the socket for broadcasting via emit */
+function broadcastDrawing(x, y, pX, pY) {
+	console.log("broadcasting")
 	const data = {
 		x: x,
 		y: y,
@@ -79,5 +123,5 @@ function sendmouse(x, y, pX, pY) {
 		strokeWidth: strokeWidth,
 	}
 
-	socket.emit('mouse', data)
+	socket.emit('draw', data)
 }
