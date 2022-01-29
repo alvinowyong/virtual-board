@@ -1,38 +1,29 @@
 {
   "name": "virtualboard",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-scripts": "5.0.0",
-    "web-vitals": "^2.1.4"
-  },
+  "version": "1.0.0",
+  "description": "Real-time whiteboard",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alvinowyong/Virtualboard.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "keywords": [
+    "virtual",
+    "whiteboard",
+    "learning"
+  ],
+  "author": "Owyong Jian Wei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alvinowyong/Virtualboard/issues"
+  },
+  "homepage": "https://github.com/alvinowyong/Virtualboard#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "p5": "^1.4.0",
+    "socket.io": "^4.4.1"
   }
 }
